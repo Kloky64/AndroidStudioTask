@@ -26,6 +26,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mipt_example.ui.theme.Mipt_exampleTheme
 
 class SignIn : ComponentActivity() {
@@ -64,6 +66,9 @@ class SignIn : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun ScreenView() {
+    val screenViewModel: SignInViewModel = viewModel()
+    val viewState = screenViewModel.viewState.collectAsState()
+
     Box(modifier = Modifier.background(Color.White)) {
         Image(painter = painterResource(id = R.drawable.pattern), contentDescription = null)
     }
@@ -99,25 +104,19 @@ fun ScreenView() {
         )
 
         ShowTextField(topPadding = 40.dp, placeholderText = "Login",
-            image_id = R.drawable.profile)
+            image_id = R.drawable.profile, textToWrite = viewState.value.login,
+            lambdaChangeText =  {screenViewModel.obtainEvent(SignInEvent.FillLogin(it))})
 
         ShowTextField(topPadding = 12.dp, placeholderText = "E-Mail",
-            image_id = R.drawable.message)
+            image_id = R.drawable.message, textToWrite = viewState.value.email,
+            lambdaChangeText = {screenViewModel.obtainEvent(SignInEvent.FillEmail(it))})
 
         Box(modifier = Modifier.
         padding(top = 12.dp)
         ) {
-            var writePlaceHolder by remember {
-                mutableStateOf("")
-            }
-
-            var showPassword by remember {
-                mutableStateOf(false)
-            }
-
             TextField(
-                value = writePlaceHolder,
-                onValueChange = { writePlaceHolder = it },
+                value = viewState.value.password,
+                onValueChange = {screenViewModel.obtainEvent(SignInEvent.FillPassword(it))},
                 placeholder = {
                     Text(text = "Password", color = Color(0x66000000),
                         fontSize = 14.sp, fontWeight = FontWeight(400))
@@ -136,14 +135,16 @@ fun ScreenView() {
                     val nonVisible = ImageVector.vectorResource(id = R.drawable.show)
                     val visible = ImageVector.vectorResource(id = R.drawable.eye_icon)
 
-                    IconButton(onClick = {showPassword = !showPassword}) {
+                    IconButton(onClick = { screenViewModel.obtainEvent(SignInEvent.ShowPassword)}) {
                         Icon(
-                            imageVector = if (showPassword) nonVisible else visible,
-                            contentDescription = if (showPassword) "Show Password" else "Hide Password"
+                            imageVector = if (viewState.value.hidePass) nonVisible else visible,
+                            contentDescription = if (viewState.value.hidePass) "Show Password"
+                            else "Hide Password"
                         )
                     }
                 },
-                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation()
+                visualTransformation = if (viewState.value.hidePass) VisualTransformation.None
+                else PasswordVisualTransformation()
             )
         }
 
@@ -151,15 +152,15 @@ fun ScreenView() {
             .padding(top = 20.dp)
             .width(325.dp), horizontalAlignment = Alignment.Start) {
             Row() {
-                var checked by remember {
-                    mutableStateOf(true)
-                }
+//                var checked by remember {
+//                    mutableStateOf(true)
+//                }
                 Checkbox(
-                    checked = checked,
+                    checked = viewState.value.keepSignInCheck,
                     modifier = Modifier
                         .width(22.dp)
                         .height(22.dp),
-                    onCheckedChange = { checked = !checked },
+                    onCheckedChange = { screenViewModel.obtainEvent(SignInEvent.CheckKeepSignIn) },
                     colors = CheckboxDefaults.colors(
                         Color(0xFF53E88B)
                     )
@@ -170,15 +171,15 @@ fun ScreenView() {
             }
 
             Row(modifier = Modifier.padding(top = 14.dp)) {
-                var checked by remember {
-                    mutableStateOf(true)
-                }
+//                var checked by remember {
+//                    mutableStateOf(true)
+//                }
                 Checkbox(
-                    checked = checked,
+                    checked = viewState.value.emailMe,
                     modifier = Modifier
                         .width(22.dp)
                         .height(22.dp),
-                    onCheckedChange = { checked = !checked },
+                    onCheckedChange = { screenViewModel.obtainEvent(SignInEvent.CheckEmailMe) },
                     colors = CheckboxDefaults.colors(
                         Color(0xFF53E88B)
                     )
@@ -206,7 +207,9 @@ fun ScreenView() {
         Text(text = "already have an account?",
             fontWeight = FontWeight(400),
             fontSize = 12.sp,
-            modifier = Modifier.padding(top = 20.dp).clickable {  },
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .clickable { },
             color = Color(0xFF53E88B),
             textDecoration = TextDecoration.Underline)
     }
@@ -214,17 +217,15 @@ fun ScreenView() {
 }
 
 @Composable
-fun ShowTextField(topPadding: Dp, placeholderText: String, image_id: Int) {
+fun ShowTextField(topPadding: Dp, placeholderText: String, image_id: Int,
+                  textToWrite: String, lambdaChangeText: (String) -> Unit) {
     Box(modifier = Modifier.
     padding(top = topPadding)
     ) {
-        var writePlaceHolder by remember {
-            mutableStateOf("")
-        }
 
         TextField(
-            value = writePlaceHolder,
-            onValueChange = { writePlaceHolder = it },
+            value = textToWrite,
+            onValueChange = lambdaChangeText,
             placeholder = {
                 Text(text = placeholderText, color = Color(0x66000000),
                 fontSize = 14.sp, fontWeight = FontWeight(400))

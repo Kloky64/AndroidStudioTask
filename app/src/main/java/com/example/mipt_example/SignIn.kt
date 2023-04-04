@@ -152,9 +152,6 @@ fun ScreenView() {
             .padding(top = 20.dp)
             .width(325.dp), horizontalAlignment = Alignment.Start) {
             Row() {
-//                var checked by remember {
-//                    mutableStateOf(true)
-//                }
                 Checkbox(
                     checked = viewState.value.keepSignInCheck,
                     modifier = Modifier
@@ -171,9 +168,6 @@ fun ScreenView() {
             }
 
             Row(modifier = Modifier.padding(top = 14.dp)) {
-//                var checked by remember {
-//                    mutableStateOf(true)
-//                }
                 Checkbox(
                     checked = viewState.value.emailMe,
                     modifier = Modifier

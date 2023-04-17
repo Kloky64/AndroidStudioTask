@@ -1,4 +1,4 @@
-package com.example.mipt_example
+package com.example.mipt_example.di
 
 import dagger.Module
 import dagger.Provides

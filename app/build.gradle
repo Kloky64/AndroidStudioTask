@@ -17,6 +17,15 @@ android {
         versionCode 1
         versionName "1.0"
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true"
+                ]
+            }
+        }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
@@ -51,6 +60,8 @@ android {
 
 dependencies {
 
+    def roomVersion = "2.5.0"
+
     implementation 'com.google.dagger:hilt-android:2.44'
     kapt 'com.google.dagger:hilt-compiler:2.44'
 
@@ -69,6 +80,14 @@ dependencies {
     implementation "androidx.compose.ui:ui:1.4.0"
     implementation "androidx.compose.ui:ui-tooling-preview:1.4.0"
     implementation 'androidx.compose.material:material:1.4.0'
+
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    implementation "androidx.activity:activity-ktx:1.7.0"
+    implementation "androidx.fragment:fragment-ktx:1.5.6"
+    implementation "androidx.room:room-ktx:2.5.1"
+    //kapt "android.arch.persistence.room:compiler:$roomVersion"
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 

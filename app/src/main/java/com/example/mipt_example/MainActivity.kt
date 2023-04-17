@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mipt_example.ui.theme.Mipt_exampleTheme
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.mipt_example.screens.ResScreenView
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

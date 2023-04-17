@@ -1,4 +1,4 @@
-package com.example.mipt_example
+package com.example.mipt_example.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -47,6 +48,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mipt_example.R
+import com.example.mipt_example.SignInEvent
+import com.example.mipt_example.SignInViewModel
 import com.example.mipt_example.ui.theme.Mipt_exampleTheme
 
 class SignIn : ComponentActivity() {
@@ -88,26 +92,27 @@ fun ScreenView() {
                     .height(139.dp))
         }
 
-        Text(text = "FoodNinja", color = Color(0xFF15BE77), textAlign = TextAlign.Center,
+        Text(text = stringResource(R.string.FoodNinja), color = Color(0xFF15BE77),
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 2.dp), fontSize = 40.sp,
             fontWeight = FontWeight(400)
         )
 
-        Text(text = "Deliver Favorite Food", textAlign = TextAlign.Center,
+        Text(text = stringResource(R.string.Deliver_Favorite_Food), textAlign = TextAlign.Center,
             modifier = Modifier.offset(y = (-6).dp), fontSize = 13.sp,
             fontWeight = FontWeight(600)
         )
 
-        Text(text = "Sign Up For Free",textAlign = TextAlign.Center,
+        Text(text = stringResource(R.string.Sign_Up_For_Free),textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 65.dp), fontSize = 20.sp,
             fontWeight = FontWeight(400)
         )
 
-        ShowTextField(topPadding = 40.dp, placeholderText = "Login",
+        ShowTextField(topPadding = 40.dp, placeholderText = stringResource(R.string.Login),
             image_id = R.drawable.profile, textToWrite = viewState.value.login,
             lambdaChangeText =  {screenViewModel.obtainEvent(SignInEvent.FillLogin(it))})
 
-        ShowTextField(topPadding = 12.dp, placeholderText = "E-Mail",
+        ShowTextField(topPadding = 12.dp, placeholderText = stringResource(R.string.E_Mail),
             image_id = R.drawable.message, textToWrite = viewState.value.email,
             lambdaChangeText = {screenViewModel.obtainEvent(SignInEvent.FillEmail(it))})
 
@@ -118,7 +123,7 @@ fun ScreenView() {
                 value = viewState.value.password,
                 onValueChange = {screenViewModel.obtainEvent(SignInEvent.FillPassword(it))},
                 placeholder = {
-                    Text(text = "Password", color = Color(0x66000000),
+                    Text(text = stringResource(R.string.Password), color = Color(0x66000000),
                         fontSize = 14.sp, fontWeight = FontWeight(400))
                 },
                 modifier = Modifier
@@ -138,8 +143,9 @@ fun ScreenView() {
                     IconButton(onClick = { screenViewModel.obtainEvent(SignInEvent.ShowPassword)}) {
                         Icon(
                             imageVector = if (viewState.value.hidePass) nonVisible else visible,
-                            contentDescription = if (viewState.value.hidePass) "Show Password"
-                            else "Hide Password"
+                            contentDescription = if (viewState.value.hidePass)
+                                stringResource(R.string.Show_Password)
+                            else stringResource(R.string.Hide_Password)
                         )
                     }
                 },
@@ -163,7 +169,8 @@ fun ScreenView() {
                     )
                 )
 
-                Text(text = "Keep Me Signed In", textAlign = TextAlign.Center, fontSize = 12.sp,
+                Text(text = stringResource(R.string.Keep_Me_Signed_In),
+                    textAlign = TextAlign.Center, fontSize = 12.sp,
                     fontWeight = FontWeight(400), modifier = Modifier.padding(start = 8.dp))
             }
 
@@ -179,7 +186,8 @@ fun ScreenView() {
                     )
                 )
 
-                Text(text = "Email Me About Special Pricing", textAlign = TextAlign.Center, fontSize = 12.sp,
+                Text(text = stringResource(R.string.Email_Me), textAlign = TextAlign.Center,
+                    fontSize = 12.sp,
                     fontWeight = FontWeight(400), modifier = Modifier.padding(start = 8.dp))
             }
         }
@@ -187,7 +195,7 @@ fun ScreenView() {
         Button(colors = ButtonDefaults.buttonColors(Color(0xFF53E88B)),
             onClick = {},
             content = {
-                Text(text = "Create Account",
+                Text(text = stringResource(R.string.Create_Account),
                     fontWeight = FontWeight(400),
                     fontSize = 16.sp,
                     color = Color.White
@@ -198,7 +206,7 @@ fun ScreenView() {
                 .width(175.dp)
                 .height(57.dp))
 
-        Text(text = "already have an account?",
+        Text(text = stringResource(R.string.Already_Account),
             fontWeight = FontWeight(400),
             fontSize = 12.sp,
             modifier = Modifier

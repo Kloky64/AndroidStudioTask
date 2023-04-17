@@ -1,4 +1,4 @@
-package com.example.mipt_example
+package com.example.mipt_example.data
 
 import kotlinx.serialization.Serializable
 

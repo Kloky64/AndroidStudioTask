@@ -1,4 +1,4 @@
-package com.example.mipt_example
+package com.example.mipt_example.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,6 +21,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.example.mipt_example.R
+import com.example.mipt_example.data.NetRestaurant
 
 
 data class Restaurant (
@@ -47,10 +50,14 @@ fun ResScreenView() {
 
 @Composable
 fun PrintRestaurantInfo(restaurants: List<Restaurant>) {
-    LazyColumn(modifier = Modifier.padding(top = 40.dp).background(color = Color.White)) {
+    LazyColumn(modifier = Modifier
+        .padding(top = 40.dp)
+        .background(color = Color.White)) {
         items(restaurants) { restaurant ->
-            Text("Restaurant: ${restaurant.name}", textAlign = TextAlign.Center)
-            Text(text = "Delivery loss: ${restaurant.deliveryTime}", textAlign = TextAlign.Center,
+            Text(stringResource(R.string.Restaurant_desc) + restaurant.name,
+                textAlign = TextAlign.Center)
+            Text(text = stringResource(R.string.Delivery_loss) + restaurant.deliveryTime,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 10.dp))
             AsyncImage(model = ImageRequest.Builder(LocalContext.current)
                 .data(restaurant.image)

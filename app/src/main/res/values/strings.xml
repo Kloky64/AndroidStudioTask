@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">mipt_example</string>
+    <string name="Restaurant_desc">"Restaurant: "</string>
+    <string name="Delivery_loss">"Delivery loss: "</string>
+    <string name="FoodNinja">FoodNinja</string>
+    <string name="Deliver_Favorite_Food">Deliver Favorite Food</string>
+    <string name="Sign_Up_For_Free">Sign Up For Free</string>
+    <string name="Login">Login</string>
+    <string name="E_Mail">E-Mail</string>
+    <string name="Password">Password</string>
+    <string name="Show_Password">Show Password</string>
+    <string name="Hide_Password">Hide Password</string>
+    <string name="Keep_Me_Signed_In">Keep Me Signed In</string>
+    <string name="Email_Me">Email Me About Special Pricing</string>
+    <string name="Create_Account">Create Account</string>
+    <string name="Already_Account">already have an account?</string>
 </resources>

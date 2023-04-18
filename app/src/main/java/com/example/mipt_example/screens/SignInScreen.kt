@@ -1,15 +1,17 @@
 package com.example.mipt_example.screens
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -20,21 +22,17 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -43,34 +41,33 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.mipt_example.R
 import com.example.mipt_example.SignInEvent
 import com.example.mipt_example.SignInViewModel
-import com.example.mipt_example.ui.theme.Mipt_exampleTheme
 
-class SignIn : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Mipt_exampleTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    ScreenView()
-                }
-            }
-        }
-    }
-}
+//class SignIn : ComponentActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            Mipt_exampleTheme {
+//                // A surface container using the 'background' color from the theme
+//                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+//                    ScreenView()
+//                }
+//            }
+//        }
+//    }
+//}
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
-fun ScreenView() {
-    val screenViewModel: SignInViewModel = viewModel()
+fun SignInScreen(screenViewModel: SignInViewModel, navController: NavController) {
     val viewState = screenViewModel.viewState.collectAsState()
 
     Box(modifier = Modifier.background(Color.White)) {
@@ -80,21 +77,21 @@ fun ScreenView() {
     Column(
         modifier = Modifier
             .width(375.dp)
-            .height(812.dp),
+            .height(812.dp), //812
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(7.dp)) // 49
         Box( modifier = Modifier
-            .background(Color.Transparent)
-            .padding(top = 49.dp)) {
+            .background(Color.Transparent)) {
             Image(painter = painterResource(id = R.drawable.vegetables), contentDescription = null,
                 Modifier
-                    .width(175.dp)
-                    .height(139.dp))
+                    .width(87.dp) // 175
+                    .height(69.dp)) // 139
         }
-
+        Spacer(modifier = Modifier.height(2.dp))
         Text(text = stringResource(R.string.FoodNinja), color = Color(0xFF15BE77),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 2.dp), fontSize = 40.sp,
+            modifier = Modifier, fontSize = 40.sp,
             fontWeight = FontWeight(400)
         )
 
@@ -103,12 +100,12 @@ fun ScreenView() {
             fontWeight = FontWeight(600)
         )
 
+        Spacer(modifier = Modifier.height(30.dp)) // 65
         Text(text = stringResource(R.string.Sign_Up_For_Free),textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 65.dp), fontSize = 20.sp,
+            modifier = Modifier, fontSize = 20.sp,
             fontWeight = FontWeight(400)
         )
-
-        ShowTextField(topPadding = 40.dp, placeholderText = stringResource(R.string.Login),
+        ShowTextField(topPadding = 10.dp, placeholderText = stringResource(R.string.Login), // 40
             image_id = R.drawable.profile, textToWrite = viewState.value.login,
             lambdaChangeText =  {screenViewModel.obtainEvent(SignInEvent.FillLogin(it))})
 
@@ -116,8 +113,8 @@ fun ScreenView() {
             image_id = R.drawable.message, textToWrite = viewState.value.email,
             lambdaChangeText = {screenViewModel.obtainEvent(SignInEvent.FillEmail(it))})
 
-        Box(modifier = Modifier.
-        padding(top = 12.dp)
+        Spacer(modifier = Modifier.height(12.dp))
+        Box(modifier = Modifier
         ) {
             TextField(
                 value = viewState.value.password,
@@ -128,7 +125,7 @@ fun ScreenView() {
                 },
                 modifier = Modifier
                     .width(325.dp)
-                    .height(57.dp),
+                    .height(57.dp), // 57
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.White
                 ),
@@ -154,8 +151,8 @@ fun ScreenView() {
             )
         }
 
+        Spacer(modifier = Modifier.height(20.dp)) // 20
         Column(modifier = Modifier
-            .padding(top = 20.dp)
             .width(325.dp), horizontalAlignment = Alignment.Start) {
             Row() {
                 Checkbox(
@@ -168,13 +165,13 @@ fun ScreenView() {
                         Color(0xFF53E88B)
                     )
                 )
-
                 Text(text = stringResource(R.string.Keep_Me_Signed_In),
                     textAlign = TextAlign.Center, fontSize = 12.sp,
                     fontWeight = FontWeight(400), modifier = Modifier.padding(start = 8.dp))
             }
 
-            Row(modifier = Modifier.padding(top = 14.dp)) {
+            Spacer(modifier = Modifier.height(14.dp))
+            Row(modifier = Modifier) {
                 Checkbox(
                     checked = viewState.value.emailMe,
                     modifier = Modifier
@@ -192,8 +189,13 @@ fun ScreenView() {
             }
         }
 
+        Spacer(modifier = Modifier.height(11.dp)) // 44
         Button(colors = ButtonDefaults.buttonColors(Color(0xFF53E88B)),
-            onClick = {},
+            onClick = {navController.navigate("RestaurantInfoScreen") {
+                         popUpTo("SignIn") {
+                            inclusive = true
+                         }
+                      }},
             content = {
                 Text(text = stringResource(R.string.Create_Account),
                     fontWeight = FontWeight(400),
@@ -202,25 +204,27 @@ fun ScreenView() {
                 )
             },
             modifier = Modifier
-                .padding(top = 44.dp)
                 .width(175.dp)
                 .height(57.dp))
 
+        Spacer(modifier = Modifier.height(20.dp))
         Text(text = stringResource(R.string.Already_Account),
             fontWeight = FontWeight(400),
             fontSize = 12.sp,
             modifier = Modifier
-                .padding(top = 20.dp)
                 .clickable { },
             color = Color(0xFF53E88B),
             textDecoration = TextDecoration.Underline)
     }
+
+    val context = LocalContext.current
 
 }
 
 @Composable
 fun ShowTextField(topPadding: Dp, placeholderText: String, image_id: Int,
                   textToWrite: String, lambdaChangeText: (String) -> Unit) {
+    Spacer(modifier = Modifier.height(topPadding))
     Box(modifier = Modifier.
     padding(top = topPadding)
     ) {
@@ -234,7 +238,7 @@ fun ShowTextField(topPadding: Dp, placeholderText: String, image_id: Int,
             },
             modifier = Modifier
                 .width(325.dp)
-                .height(57.dp),
+                .height(57.dp), // 57
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.White
             ),

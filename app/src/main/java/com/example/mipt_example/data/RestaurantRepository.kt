@@ -1,5 +1,6 @@
 package com.example.mipt_example.data;
 
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.request
@@ -28,13 +29,13 @@ class RestaurantRepository @Inject constructor(private val httpClient: HttpClien
                     method = HttpMethod.Get
                 }.body<CatalogResponse>()
 
+                emit(response)
+
                 restaurantDao.insert(*response.nearest.map {
                     it.mapToDBRestaurant()
                 }.toTypedArray())
-
-                emit(response)
             } catch (e: Exception) {
-                print(e.stackTrace)
+                Log.e("kloky64", e.stackTraceToString())
             }
 
         }

@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Entity
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
@@ -27,7 +28,7 @@ interface RestaurantDao {
     @Query("SELECT * FROM restaurants")
     suspend fun selectAll(): List<RestaurantDBEntity>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg restaurants: RestaurantDBEntity)
 
     @Update
